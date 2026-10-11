@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0A0A0B" />
+<meta name="description" content="GUSTAVOEURO — Circolo operativo riservato. Banconote Euro e ricariche PayPal." />
+<title>GUSTAVOEURO</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A0A0B'/%3E%3Crect x='1.5' y='1.5' width='61' height='61' rx='11' fill='none' stroke='%23C9A24B' stroke-width='1.5'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='36' font-weight='700' fill='%23C9A24B' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { ink:'#0A0A0B', graphite:'#141416', graphite2:'#1C1C1F', gold:'#C9A24B', goldsoft:'#E4CC8C', cream:'#F5EFE3', crypto:'#34D399' },
+      fontFamily: { serif:['"Cormorant Garamond"','Georgia','serif'], sans:['Manrope','Inter','system-ui','sans-serif'] },
+      boxShadow: { glow:'0 0 40px -10px rgba(201,162,75,0.45)', panel:'0 20px 60px -20px rgba(0,0,0,0.8)' },
+      keyframes: {
+        blink:{ '0%,100%':{opacity:'1'}, '50%':{opacity:'0.12'} },
+        shimmer:{ '0%':{backgroundPosition:'-200% 0'}, '100%':{backgroundPosition:'200% 0'} },
+        fadeUp:{ '0%':{opacity:'0', transform:'translateY(14px)'}, '100%':{opacity:'1', transform:'translateY(0)'} },
+        pop:{ '0%':{opacity:'0', transform:'scale(.94)'}, '100%':{opacity:'1', transform:'scale(1)'} }
+      },
+      animation: { blink:'blink 1.1s ease-in-out infinite', shimmer:'shimmer 2.2s linear infinite', fadeUp:'fadeUp .5s cubic-bezier(.22,1,.36,1) both', pop:'pop .4s cubic-bezier(.22,1,.36,1) both' }
+    }
+  }
+}
+</script>
+
+<style>
+  :root{ color-scheme:dark; }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; min-height:100dvh; background-color:#0A0A0B; color:#F5EFE3;
+    font-family:'Manrope',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(1200px 700px at 50% -10%, rgba(201,162,75,0.10), transparent 60%),
+      radial-gradient(900px 600px at 85% 110%, rgba(52,211,153,0.06), transparent 60%);
+    background-attachment:fixed;
+  }
+  body::after{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{ background:rgba(201,162,75,.3); }
+  :focus-visible{ outline:2px solid #C9A24B; outline-offset:2px; border-radius:6px; }
+  ::-webkit-scrollbar{ width:9px; } ::-webkit-scrollbar-thumb{ background:#2a2a2e; border-radius:9px; }
+
+  .glass{ background:rgba(20,20,22,.62); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(201,162,75,.20); border-radius:20px; box-shadow:0 20px 60px -20px rgba(0,0,0,.8); }
+  .gold-text{ font-family:'Cormorant Garamond',serif; letter-spacing:.18em; color:#C9A24B; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:999px;
+    padding:.85rem 1.7rem; font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.14em;
+    transition:all .3s cubic-bezier(.22,1,.36,1); cursor:pointer; border:1px solid transparent; }
+  .btn-gold{ background:linear-gradient(to bottom,#E4CC8C,#C9A24B); color:#0A0A0B; }
+  .btn-gold:hover{ box-shadow:0 0 40px -10px rgba(201,162,75,.55); transform:translateY(-2px); }
+  .btn-gold:active{ transform:translateY(0); }
+  .btn-ghost{ background:transparent; border-color:rgba(201,162,75,.25); color:rgba(245,239,227,.85); }
+  .btn-ghost:hover{ border-color:rgba(201,162,75,.6); color:#F5EFE3; }
+  .btn:disabled{ opacity:.4; pointer-events:none; }
+  .input{ width:100%; border-radius:14px; background:rgba(28,28,31,.7); border:1px solid rgba(201,162,75,.2);
+    padding:.8rem 1rem; color:#F5EFE3; font-size:.9rem; transition:border-color .25s; }
+  .input::placeholder{ color:rgba(245,239,227,.3); }
+  .input:focus{ border-color:rgba(201,162,75,.6); outline:none; }
+  select.input option{ background:#141416; color:#F5EFE3; }
+  .skeleton{ border-radius:12px; background:linear-gradient(90deg,#1C1C1F,#141416,#1C1C1F);
+    background-size:200% 100%; animation:shimmer 2.2s linear infinite; }
+  .link-u{ position:relative; }
+  .link-u::after{ content:''; position:absolute; left:0; bottom:-3px; height:1px; width:100%; background:rgba(201,162,75,.5);
+    transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+  .link-u:hover::after{ transform:scaleX(1); }
+  .screen{ animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both; }
+  .drawer-enter{ animation:pop .35s cubic-bezier(.22,1,.36,1) both; }
+  @media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+
+<body>
+<div id="root"></div>
+<noscript style="display:block;padding:40px;text-align:center;font-family:sans-serif">Attiva JavaScript per accedere a GUSTAVOEURO.</noscript>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback, useMemo, useRef, createContext, useContext } = React;
+
+/* ============================================================
+   1. COSTANTI
+============================================================ */
+const ACCESS_CODE = 'GUSTAVO2026';
+const TELEGRAM = {
+  direct: 'https://t.me/gustavoeuro',
+  reviews: 'https://t.me/+gBf54xWnFapjMmRh',
+  ios: 'https://apps.apple.com/app/telegram-messenger/id686449807',
+  android: 'https://play.google.com/store/apps/details?id=org.telegram.messenger',
+};
+const WALLETS = {
+  SOL: 'Rh2z4dzfHqE5Sd3DEV424ZWUE6XkCpNoPD7DgLiFCcV',
+  BTC: 'bc1qcjcf7kunlrla8qn6jwxg00hyjj6w8nnr67lk8v',
+  LTC: 'ltc1qpayxkexa48s6atp48quev2p2f8xnp79pa8zlkx',
+};
+const COINS = [
+  { id:'SOL', label:'Solana (SOL)',  address:WALLETS.SOL, chain:'exchange' },
+  { id:'BTC', label:'Bitcoin (BTC)', address:WALLETS.BTC, chain:'blockchain' },
+  { id:'LTC', label:'Litecoin (LTC)',address:WALLETS.LTC, chain:'blockchain' },
+];
+const SHIPPERS = ['DHL','BRT','GLS','POSTE ITALIANE','LOCKER INPOST'];
+const PREFIXES = ['+39','+34','+33','+44','+49','+41','+43','+351','+32','+31','+1','+86','+971'];
+const LANGS = [ {code:'it',label:'ITALIANO'}, {code:'es',label:'ESPAGNOL'}, {code:'en',label:'ENGLISH'}, {code:'fr',label:'FRANÇAIS'} ];
+
+const BANKNOTES = {
+  '10': [[30,3.2],[50,2.8],[75,2.5],[100,2.2],[150,1.9]],
+  '20': [[30,8],[50,7.5],[75,7],[100,6.5],[150,5.8]],
+  '50': [[30,12],[50,11],[75,9.5],[100,8.5],[150,7.8],[200,7]],
+};
+const rowsOf = (d) => BANKNOTES[d].map(([qty,unit]) => ({ qty, unit, total:+(qty*unit).toFixed(2) }));
+const PAYPAL = [ {price:120,balance:360},{price:150,balance:680},{price:180,balance:930},{price:220,balance:1570},
+                 {price:280,balance:2140},{price:320,balance:3400},{price:380,balance:4800},{price:470,balance:5800} ];
+const IMG = { '10':'assets/banconote-10.webp','20':'assets/banconote-20.webp','50':'assets/banconote-50.webp','MIX':'assets/banconote-mix.webp', paypal:'assets/paypal-transfer.webp', logo:'assets/logo.png' };
+
+/* ============================================================
+   2. TRADUZIONI (IT / ES / EN / FR)
+============================================================ */
+const T = {
+it:{
+  common:{ back:'← INDIETRO', access:'ACCEDI', copy:'COPIA', copied:'COPIATO ✓', total:'TOTALE', qty:'Quantità', remove:'Rimuovi', checkout:'PROCEDI AL CHECKOUT', empty:'Il carrello è vuoto.', free:'SPEDIZIONE GRATUITA', tracking:'Dopo la spedizione inviamo SEMPRE il codice di tracciamento.', cart:'CARRELLO', close:'Chiudi' },
+  boot:{ enter:'INIZIALIZZAZIONE CANALE' },
+  gate:{ title:'ACCESSO RISERVATO', sub:'INSERISCI IL CODICE PER ACCEDERE', wrong:'CODICE NON VALIDO', hint:'Codice fornito su invito' },
+  cryptoLoading:{ title:'ACCESSO CRIPTATO', l1:'Connessione end-to-end attiva', l2:'Verifica canale sicuro', l3:'Chiave di sessione generata', done:'CANALE SICURO STABILITO' },
+  home:{ hero:'BENVENUTO. UN CIRCOLO OPERATIVO RISERVATO, ACCESSIBILE SOLO SU INVITO. FORNIAMO SOLO RISULTATI A CHI SA GIÀ COSA CHIEDERE. NON SIAMO QUI PER GIOCARE, SOLO PERSONE SERIE E CON VOGLIA DI SVOLTARE LA PROPRIA VITA!', contact:'CONTATTAMI', bank:'BANCONOTE EURO', paypal:'RICARICHE PAYPAL', reviews:'RECENSIONI', faq:'FAQ & SICUREZZA', privacy:'INFORMATIVA PRIVACY', terms:'TERMINI E CONDIZIONI', cookies:'COOKIE POLICY', status:'CONNESSIONE CRITTOGRAFATA // CANALE SICURO // V2.4.1' },
+  contact:{ q:'HAI TELEGRAM?', yes:'SÌ, HO TELEGRAM', no:'NO, NON HO TELEGRAM', install:'INSTALLA TELEGRAM', installHint:'Installa Telegram, poi torna qui e premi SÌ.' },
+  bank:{ choose:'SCEGLI IL TAGLIO', mixed:'MISTO', qty:'pezzi', unit:'al pezzo', complete:'COMPLETA ORDINE SUBITO', addCart:'AGGIUNGI AL CARRELLO', added:'AGGIUNTO ✓' },
+  paypal:{ whatTitle:'COSA SONO LE RICARICHE PAYPAL', what:'Carichiamo il tuo saldo PayPal con un trasferimento rapido tramite metodo Amici e Familiari. Nessuna commissione visibile: paghi una cifra e ricevi un saldo maggiore, immediatamente disponibile e prelevabile.', ok:'SÌ, HO CAPITO', no:'NO, PREFERISCO NON FARLO', price:'Paghi', balance:'Ricevi saldo', telegramQ:'HAI UN ACCOUNT TELEGRAM ATTIVO?', telegramYes:'SÌ, PROCEDI ALL\u2019ORDINE', telegramNo:'NO, NON HO L\u2019ACCOUNT TELEGRAM', emailTitle:'VERIFICA EMAIL PAYPAL', emailHint:'Inserisci la tua email o username PayPal due volte.', emailPh:'email o username PayPal', emailRepeat:'ripeti email o username PayPal', mismatch:'I DUE VALORI NON COINCIDONO', verify:'VERIFICA E PROCEDI', verifying:'VERIFICA IN CORSO' },
+  ship:{ title:'DATI SPEDIZIONE', address:'Indirizzo di casa', civic:'Numero civico', zip:'Codice postale', email:'Email', phone:'Cellulare', carrier:'SCEGLI IL CORRIERE', locker:'Via del locker', free:'LA SPEDIZIONE È GRATUITA', next:'VAI AL PAGAMENTO', required:'Compila tutti i campi' },
+  pay:{ secure:'PROTEZIONE END-TO-END // CRITTOGRAFIA ATTIVA', accept:'Accettiamo solo questi metodi di pagamento', crypto:'CRYPTO', cryptoSub:'L\u2019unico pagamento anonimo e che si può effettuare direttamente nel sito', bank:'BONIFICO ISTANTANEO', amazon:'BUONI AMAZON' },
+  crypto:{ walletQ:'HAI GIÀ UN PORTAFOGLIO CRYPTO?', walletYes:'SÌ, HO GIÀ UN WALLET CRYPTO', walletNo:'NO, NON HO UN WALLET', confirm:'CONFERMA ORDINE', choose:'SCEGLI LA CRIPTOVALUTA', waitExchange:'In attesa di conferma da parte dell\u2019exchange', waitChain:'In attesa di conferma dalla blockchain', completed:'ORDINE COMPLETATO', processing:'STIAMO ELABORANDO IL TUO ORDINE', info:'Per codice di tracciamento e info:', pending:'ORDINE NON ANCORA PRESO IN CARICO — PAGAMENTO NON RICEVUTO', failed:'PAGAMENTO NON EFFETTUATO — TORNA INDIETRO PER COMPLETARE L\u2019ORDINE' },
+  bankTransfer:{ q:'PER COMPLETARE QUESTO TIPO DI PAGAMENTO È NECESSARIO AVERE TELEGRAM', yes:'SÌ, HO TELEGRAM', no:'NO, NON HO TELEGRAM', hint:'I tuoi dati di spedizione sono stati copiati: incollali in chat.' },
+  amazon:{ q:'HAI GIÀ UN BUONO AMAZON?', yes:'SÌ, CE L\u2019HO', insert:'INSERISCI IL CODICE DEL BUONO', codePh:'CODICE BUONO AMAZON', send:'INVIA' },
+  reviews:{ q:'PER VEDERE LE RECENSIONI DEVI AVERE TELEGRAM!', yes:'SÌ, HO GIÀ TELEGRAM', no:'NO, NON HO TELEGRAM' },
+  faq:{ title:'FAQ & SICUREZZA', items:[
+    { h:'CONNESSIONE SICURA', p:'Crittografia end-to-end attiva // Nessun log salvato' },
+    { h:'COME FUNZIONA LA SPEDIZIONE?', p:'Tutti i pacchetti vengono spediti in modalità stealth con packaging anonimo. La confezione esterna non riporta alcun riferimento al contenuto. Utilizziamo corrieri affidabili e forniamo tracking su Telegram. Tempi medi: EU 48-72h, Extra-EU 5-7 giorni.' },
+    { h:'ACCETTATE PAGAMENTI ANONIMI?', p:'Sì. Accettiamo Cryptovalute. I pagamenti crypto sono i più veloci e garantiscono anonimato totale.' },
+    { h:'COME FUNZIONA LA RICARICA PAYPAL?', p:'Dopo il pagamento, i fondi vengono trasferiti sul tuo PayPal entro 1-4 ore tramite metodo Amici e Familiari. Non ci sono commissioni visibili e il saldo risulta immediatamente disponibile e prelevabile.' },
+    { h:'I MIEI DATI SONO AL SICURO?', p:'Non conserviamo alcun dato personale. Le conversazioni Telegram sono criptate e i log vengono cancellati automaticamente ogni 24 ore. Non chiediamo mai documenti o informazioni identificative.' },
+    { h:'PROTOCOLLI DI SICUREZZA', list:['Comunicazioni su canali criptati end-to-end','Nessuna conservazione di dati personali','Transazioni anonime tramite crypto','Server offshore in giurisdizioni sicure'] }
+  ]},
+  privacy:{ title:'INFORMATIVA SULLA PRIVACY', updated:'Ultimo aggiornamento: Aprile 2026. Trattamento dei dati conforme alla normativa vigente, crittografia avanzata e nessuna condivisione con terze parti.', sections:[
+    { h:'1. RACCOLTA DEI DATI', p:'GUSTAVOEURO raccoglie esclusivamente i dati strettamente necessari per l\u2019erogazione dei servizi richiesti. I dati personali vengono trattati nel rispetto della normativa vigente in materia di protezione dei dati. Tipologie: dati di contatto forniti volontariamente; dati tecnici di navigazione (IP, browser, dispositivo); cookie tecnici essenziali.' },
+    { h:'2. FINALITÀ DEL TRATTAMENTO', p:'I dati sono usati per: gestione richieste di contatto; miglioramento esperienza utente; adempimenti di legge; sicurezza della piattaforma.' },
+    { h:'3. CONSERVAZIONE E SICUREZZA', p:'I dati vengono conservati per il tempo strettamente necessario e protetti mediante crittografia avanzata. Eliminati in modo sicuro al termine del periodo previsto.' },
+    { h:'4. DIRITTI DELL\u2019INTERESSATO', p:'L\u2019utente ha diritto di accedere ai propri dati, richiederne rettifica o cancellazione, e opporsi al trattamento in qualsiasi momento contattando l\u2019operatore tramite i canali ufficiali.' },
+    { h:'5. TRASFERIMENTO DEI DATI', p:'GUSTAVOEURO non trasferisce, vende o condivide i dati personali con terze parti, salvo obblighi di legge.' }
+  ]},
+  terms:{ title:'TERMINI E CONDIZIONI', updated:'Ultimo aggiornamento: Aprile 2026. Condizioni d\u2019uso della piattaforma, responsabilità e regole operative del circolo.', sections:[
+    { h:'1. ACCETTAZIONE DEI TERMINI', p:'L\u2019accesso e l\u2019utilizzo di GUSTAVOEURO implica l\u2019accettazione integrale dei presenti Termini e Condizioni. Se non li accetti, non utilizzare i servizi.' },
+    { h:'2. DESCRIZIONE DEL SERVIZIO', p:'GUSTAVOEURO è una piattaforma informativa che fornisce accesso a contenuti digitali. L\u2019utente riconosce che tutti i contenuti sono forniti a scopo puramente informativo e di intrattenimento.' },
+    { h:'3. CONDOTTA DELL\u2019UTENTE', p:'L\u2019utente si impegna a: non usare il servizio per scopi illegali; non compromettere la sicurezza; non condividere informazioni riservate; rispettare la proprietà intellettuale.' },
+    { h:'4. LIMITAZIONE DI RESPONSABILITÀ', p:'GUSTAVOEURO non è responsabile per danni diretti o indiretti derivanti dall\u2019uso o impossibilità d\u2019uso. Contenuti forniti "così come sono", senza garanzie.' },
+    { h:'5. MODIFICHE AI TERMINI', p:'GUSTAVOEURO si riserva il diritto di modificare i termini in qualsiasi momento; modifiche effettive dalla pubblicazione.' }
+  ]},
+  cookies:{ title:'COOKIE POLICY', updated:'Ultimo aggiornamento: Ottobre 2026. Utilizziamo esclusivamente cookie tecnici essenziali.', sections:[
+    { h:'1. COSA SONO I COOKIE', p:'Piccoli file di testo memorizzati sul dispositivo quando visiti un sito. GUSTAVOEURO usa solo cookie tecnici essenziali.' },
+    { h:'2. TIPOLOGIE', p:'Cookie tecnici essenziali: di sessione (navigazione), di sicurezza (protezione attacchi), di preferenze (impostazioni utente). GUSTAVOEURO NON usa cookie di profilazione o tracking.' },
+    { h:'3. GESTIONE', p:'Puoi gestirli dalle impostazioni del browser; disattivare i cookie tecnici può compromettere il funzionamento.' },
+    { h:'4. COOKIE DI TERZE PARTI', p:'Nessuno; nessuna condivisione con piattaforme esterne di advertising/analytics.' },
+    { h:'5. DURATA', p:'Durata massima di sessione o 24 ore; nessun cookie persistente a lungo termine.' },
+    { h:'6. AGGIORNAMENTI', p:'La Cookie Policy può essere aggiornata; consulta regolarmente.' }
+  ]}
+},
+es:{
+  common:{ back:'← ATRÁS', access:'ACCEDER', copy:'COPIAR', copied:'COPIADO ✓', total:'TOTAL', qty:'Cantidad', remove:'Quitar', checkout:'IR AL PAGO', empty:'El carrito está vacío.', free:'ENVÍO GRATIS', tracking:'Tras el envío SIEMPRE enviamos el código de seguimiento.', cart:'CARRITO', close:'Cerrar' },
+  boot:{ enter:'INICIALIZANDO CANAL' },
+  gate:{ title:'ACCESO RESTRINGIDO', sub:'INTRODUCE EL CÓDIGO PARA ACCEDER', wrong:'CÓDIGO NO VÁLIDO', hint:'Código proporcionado por invitación' },
+  cryptoLoading:{ title:'ACCESO CIFRADO', l1:'Conexión de extremo a extremo activa', l2:'Verificando canal seguro', l3:'Clave de sesión generada', done:'CANAL SEGURO ESTABLECIDO' },
+  home:{ hero:'BIENVENIDO. UN CÍRCULO OPERATIVO PRIVADO, ACCESIBLE SOLO POR INVITACIÓN. ENTREGAMOS SOLO RESULTADOS A QUIEN YA SABE QUÉ PEDIR. NO ESTAMOS AQUÍ PARA JUGAR, SOLO PERSONAS SERIAS CON GANAS DE CAMBIAR SU VIDA!', contact:'CONTÁCTAME', bank:'BILLETES EURO', paypal:'RECARGAS PAYPAL', reviews:'RESEÑAS', faq:'FAQ & SEGURIDAD', privacy:'POLÍTICA DE PRIVACIDAD', terms:'TÉRMINOS Y CONDICIONES', cookies:'POLÍTICA DE COOKIES', status:'CONEXIÓN CIFRADA // CANAL SEGURO // V2.4.1' },
+  contact:{ q:'¿TIENES TELEGRAM?', yes:'SÍ, TENGO TELEGRAM', no:'NO, NO TENGO TELEGRAM', install:'INSTALAR TELEGRAM', installHint:'Instala Telegram, luego vuelve aquí y pulsa SÍ.' },
+  bank:{ choose:'ELIGE EL VALOR', mixed:'MIXTO', qty:'billetes', unit:'por billete', complete:'COMPLETAR PEDIDO YA', addCart:'AÑADIR AL CARRITO', added:'AÑADIDO ✓' },
+  paypal:{ whatTitle:'QUÉ SON LAS RECARGAS PAYPAL', what:'Recargamos tu saldo PayPal con una transferencia rápida por método Amigos y Familiares. Sin comisiones visibles: pagas una cifra y recibes un saldo mayor, disponible y retirable al instante.', ok:'SÍ, ENTENDIDO', no:'NO, PREFIERO NO HACERLO', price:'Pagas', balance:'Recibes saldo', telegramQ:'¿TIENES UNA CUENTA DE TELEGRAM ACTIVA?', telegramYes:'SÍ, PROCEDER AL PEDIDO', telegramNo:'NO, NO TENGO CUENTA DE TELEGRAM', emailTitle:'VERIFICAR EMAIL PAYPAL', emailHint:'Introduce tu email o usuario de PayPal dos veces.', emailPh:'email o usuario PayPal', emailRepeat:'repite email o usuario PayPal', mismatch:'LOS DOS VALORES NO COINCIDEN', verify:'VERIFICAR Y PROCEDER', verifying:'VERIFICANDO' },
+  ship:{ title:'DATOS DE ENVÍO', address:'Dirección', civic:'Número', zip:'Código postal', email:'Email', phone:'Móvil', carrier:'ELIGE EL MENSAJERO', locker:'Calle del locker', free:'EL ENVÍO ES GRATIS', next:'IR AL PAGO', required:'Completa todos los campos' },
+  pay:{ secure:'PROTECCIÓN EXTREMO A EXTREMO // CIFRADO ACTIVO', accept:'Solo aceptamos estos métodos de pago', crypto:'CRIPTO', cryptoSub:'El único pago anónimo y que se puede hacer directamente en el sitio', bank:'TRANSFERENCIA INSTANTÁNEA', amazon:'CHEQUES AMAZON' },
+  crypto:{ walletQ:'¿YA TIENES UNA CARTERA CRIPTO?', walletYes:'SÍ, YA TENGO UNA CARTERA CRIPTO', walletNo:'NO, NO TENGO CARTERA', confirm:'CONFIRMAR PEDIDO', choose:'ELIGE LA CRIPTOMONEDA', waitExchange:'Esperando confirmación del exchange', waitChain:'Esperando confirmación de la blockchain', completed:'PEDIDO COMPLETADO', processing:'ESTAMOS PROCESANDO TU PEDIDO', info:'Para código de seguimiento e info:', pending:'PEDIDO AÚN NO RECIBIDO — PAGO NO RECIBIDO', failed:'PAGO NO REALIZADO — VUELVE ATRÁS PARA COMPLETAR EL PEDIDO' },
+  bankTransfer:{ q:'PARA COMPLETAR ESTE PAGO ES NECESARIO TENER TELEGRAM', yes:'SÍ, TENGO TELEGRAM', no:'NO, NO TENGO TELEGRAM', hint:'Tus datos de envío han sido copiados: pégalos en el chat.' },
+  amazon:{ q:'¿YA TIENES UN CHEQUE AMAZON?', yes:'SÍ, LO TENGO', insert:'INTRODUCE EL CÓDIGO DEL CHEQUE', codePh:'CÓDIGO CHEQUE AMAZON', send:'ENVIAR' },
+  reviews:{ q:'¡PARA VER LAS RESEÑAS NECESITAS TELEGRAM!', yes:'SÍ, YA TENGO TELEGRAM', no:'NO, NO TENGO TELEGRAM' },
+  faq:{ title:'FAQ & SEGURIDAD', items:[
+    { h:'CONEXIÓN SEGURA', p:'Cifrado de extremo a extremo activo // Sin registros guardados' },
+    { h:'¿CÓMO FUNCIONA EL ENVÍO?', p:'Todos los paquetes se envían en modo stealth con embalaje anónimo. El paquete exterior no muestra referencia al contenido. Usamos mensajeros fiables y damos seguimiento por Telegram. Tiempos medios: UE 48-72h, Extra-UE 5-7 días.' },
+    { h:'¿ACEPTÁIS PAGOS ANÓNIMOS?', p:'Sí. Aceptamos Criptomonedas. Los pagos cripto son los más rápidos y garantizan anonimato total.' },
+    { h:'¿CÓMO FUNCIONA LA RECARGA PAYPAL?', p:'Tras el pago, los fondos se transfieren a tu PayPal en 1-4 horas por método Amigos y Familiares. Sin comisiones visibles y el saldo queda disponible y retirable al instante.' },
+    { h:'¿ESTÁN SEGUROS MIS DATOS?', p:'No guardamos ningún dato personal. Las conversaciones de Telegram están cifradas y los registros se borran cada 24 horas. Nunca pedimos documentos ni información identificativa.' },
+    { h:'PROTOCOLOS DE SEGURIDAD', list:['Comunicaciones por canales cifrados de extremo a extremo','Sin conservación de datos personales','Transacciones anónimas vía cripto','Servidores offshore en jurisdicciones seguras'] }
+  ]},
+  privacy:{ title:'POLÍTICA DE PRIVACIDAD', updated:'Última actualización: Abril 2026. Tratamiento de datos conforme a la normativa vigente, cifrado avanzado y sin compartir con terceros.', sections:[
+    { h:'1. RECOGIDA DE DATOS', p:'GUSTAVOEURO recoge exclusivamente los datos estrictamente necesarios para prestar los servicios solicitados. Los datos se tratan conforme a la normativa vigente de protección de datos. Tipos: datos de contacto facilitados voluntariamente; datos técnicos de navegación (IP, navegador, dispositivo); cookies técnicas esenciales.' },
+    { h:'2. FINALIDAD DEL TRATAMIENTO', p:'Los datos se usan para: gestión de solicitudes de contacto; mejora de la experiencia; cumplimiento legal; seguridad de la plataforma.' },
+    { h:'3. CONSERVACIÓN Y SEGURIDAD', p:'Los datos se conservan el tiempo estrictamente necesario y se protegen con cifrado avanzado. Se eliminan de forma segura al finalizar el periodo previsto.' },
+    { h:'4. DERECHOS DEL INTERESADO', p:'El usuario tiene derecho a acceder a sus datos, solicitar rectificación o supresión, y oponerse al tratamiento en cualquier momento contactando por los canales oficiales.' },
+    { h:'5. TRANSFERENCIA DE DATOS', p:'GUSTAVOEURO no transfiere, vende ni comparte datos personales con terceros, salvo obligación legal.' }
+  ]},
+  terms:{ title:'TÉRMINOS Y CONDICIONES', updated:'Última actualización: Abril 2026. Condiciones de uso, responsabilidad y reglas operativas del círculo.', sections:[
+    { h:'1. ACEPTACIÓN', p:'El acceso y uso de GUSTAVOEURO implica la aceptación íntegra de estos Términos. Si no los aceptas, no uses los servicios.' },
+    { h:'2. DESCRIPCIÓN DEL SERVICIO', p:'GUSTAVOEURO es una plataforma informativa que da acceso a contenidos digitales. El usuario reconoce que todo el contenido es meramente informativo y de entretenimiento.' },
+    { h:'3. CONDUCTA DEL USUARIO', p:'El usuario se compromete a: no usar el servicio con fines ilegales; no comprometer la seguridad; no compartir información reservada; respetar la propiedad intelectual.' },
+    { h:'4. LIMITACIÓN DE RESPONSABILIDAD', p:'GUSTAVOEURO no es responsable de daños directos o indirectos por el uso o imposibilidad de uso. Contenidos ofrecidos "tal cual", sin garantías.' },
+    { h:'5. MODIFICACIONES', p:'GUSTAVOEURO se reserva el derecho de modificar los términos en cualquier momento; los cambios son efectivos desde su publicación.' }
+  ]},
+  cookies:{ title:'POLÍTICA DE COOKIES', updated:'Última actualización: Octubre 2026. Usamos exclusivamente cookies técnicas esenciales.', sections:[
+    { h:'1. QUÉ SON LAS COOKIES', p:'Pequeños archivos de texto almacenados en tu dispositivo al visitar un sitio. GUSTAVOEURO usa solo cookies técnicas esenciales.' },
+    { h:'2. TIPOS', p:'Cookies técnicas esenciales: de sesión (navegación), de seguridad (protección ante ataques), de preferencias (ajustes del usuario). GUSTAVOEURO NO usa cookies de perfilado o tracking.' },
+    { h:'3. GESTIÓN', p:'Puedes gestionarlas desde el navegador; desactivar las cookies técnicas puede afectar el funcionamiento.' },
+    { h:'4. COOKIES DE TERCEROS', p:'Ninguna; sin compartir con plataformas externas de publicidad/analytics.' },
+    { h:'5. DURACIÓN', p:'Duración máxima de sesión o 24 horas; sin cookies persistentes a largo plazo.' },
+    { h:'6. ACTUALIZACIONES', p:'La Política puede actualizarse; consúltala regularmente.' }
+  ]}
+},
+en:{
+  common:{ back:'← BACK', access:'ENTER', copy:'COPY', copied:'COPIED ✓', total:'TOTAL', qty:'Quantity', remove:'Remove', checkout:'GO TO CHECKOUT', empty:'Your cart is empty.', free:'FREE SHIPPING', tracking:'After shipping we ALWAYS send the tracking code.', cart:'CART', close:'Close' },
+  boot:{ enter:'INITIALIZING CHANNEL' },
+  gate:{ title:'RESTRICTED ACCESS', sub:'ENTER THE CODE TO ACCESS', wrong:'INVALID CODE', hint:'Code provided by invitation' },
+  cryptoLoading:{ title:'ENCRYPTED ACCESS', l1:'End-to-end connection active', l2:'Verifying secure channel', l3:'Session key generated', done:'SECURE CHANNEL ESTABLISHED' },
+  home:{ hero:'WELCOME. A PRIVATE OPERATIVE CIRCLE, ACCESSIBLE ONLY BY INVITATION. WE DELIVER ONLY RESULTS TO THOSE WHO ALREADY KNOW WHAT TO ASK FOR. WE ARE NOT HERE TO PLAY, ONLY SERIOUS PEOPLE EAGER TO TURN THEIR LIFE AROUND!', contact:'CONTACT ME', bank:'EURO BANKNOTES', paypal:'PAYPAL TOP-UPS', reviews:'REVIEWS', faq:'FAQ & SECURITY', privacy:'PRIVACY POLICY', terms:'TERMS & CONDITIONS', cookies:'COOKIE POLICY', status:'ENCRYPTED CONNECTION // SECURE CHANNEL // V2.4.1' },
+  contact:{ q:'DO YOU HAVE TELEGRAM?', yes:'YES, I HAVE TELEGRAM', no:'NO, I DON\u2019T HAVE TELEGRAM', install:'INSTALL TELEGRAM', installHint:'Install Telegram, then come back and press YES.' },
+  bank:{ choose:'CHOOSE THE DENOMINATION', mixed:'MIXED', qty:'notes', unit:'per note', complete:'COMPLETE ORDER NOW', addCart:'ADD TO CART', added:'ADDED ✓' },
+  paypal:{ whatTitle:'WHAT ARE PAYPAL TOP-UPS', what:'We top up your PayPal balance with a fast Friends & Family transfer. No visible fees: you pay an amount and receive a higher balance, immediately available and withdrawable.', ok:'YES, I UNDERSTAND', no:'NO, I\u2019D RATHER NOT', price:'You pay', balance:'You receive', telegramQ:'DO YOU HAVE AN ACTIVE TELEGRAM ACCOUNT?', telegramYes:'YES, PROCEED TO ORDER', telegramNo:'NO, NO TELEGRAM ACCOUNT', emailTitle:'VERIFY PAYPAL EMAIL', emailHint:'Enter your PayPal email or username twice.', emailPh:'PayPal email or username', emailRepeat:'repeat PayPal email or username', mismatch:'THE TWO VALUES DO NOT MATCH', verify:'VERIFY AND PROCEED', verifying:'VERIFYING' },
+  ship:{ title:'SHIPPING DETAILS', address:'Home address', civic:'Street number', zip:'Postal code', email:'Email', phone:'Mobile', carrier:'CHOOSE THE CARRIER', locker:'Locker street', free:'SHIPPING IS FREE', next:'GO TO PAYMENT', required:'Fill in all fields' },
+  pay:{ secure:'END-TO-END PROTECTION // ENCRYPTION ACTIVE', accept:'We accept only these payment methods', crypto:'CRYPTO', cryptoSub:'The only anonymous payment, made directly on the site', bank:'INSTANT BANK TRANSFER', amazon:'AMAZON VOUCHERS' },
+  crypto:{ walletQ:'DO YOU ALREADY HAVE A CRYPTO WALLET?', walletYes:'YES, I HAVE A CRYPTO WALLET', walletNo:'NO, I DON\u2019T HAVE ONE', confirm:'CONFIRM ORDER', choose:'CHOOSE THE CRYPTOCURRENCY', waitExchange:'Waiting for confirmation from the exchange', waitChain:'Waiting for blockchain confirmation', completed:'ORDER COMPLETED', processing:'WE ARE PROCESSING YOUR ORDER', info:'For tracking code and info:', pending:'ORDER NOT YET TAKEN — PAYMENT NOT RECEIVED', failed:'PAYMENT NOT COMPLETED — GO BACK TO COMPLETE THE ORDER' },
+  bankTransfer:{ q:'TO COMPLETE THIS PAYMENT YOU NEED TELEGRAM', yes:'YES, I HAVE TELEGRAM', no:'NO, I DON\u2019T HAVE TELEGRAM', hint:'Your shipping data has been copied: paste it in the chat.' },
+  amazon:{ q:'DO YOU ALREADY HAVE AN AMAZON VOUCHER?', yes:'YES, I HAVE ONE', insert:'ENTER THE VOUCHER CODE', codePh:'AMAZON VOUCHER CODE', send:'SEND' },
+  reviews:{ q:'TO SEE THE REVIEWS YOU NEED TELEGRAM!', yes:'YES, I ALREADY HAVE TELEGRAM', no:'NO, I DON\u2019T HAVE TELEGRAM' },
+  faq:{ title:'FAQ & SECURITY', items:[
+    { h:'SECURE CONNECTION', p:'End-to-end encryption active // No logs stored' },
+    { h:'HOW DOES SHIPPING WORK?', p:'All packages are shipped in stealth mode with anonymous packaging. The outer package shows no reference to the content. We use reliable couriers and provide tracking on Telegram. Average times: EU 48-72h, Extra-EU 5-7 days.' },
+    { h:'DO YOU ACCEPT ANONYMOUS PAYMENTS?', p:'Yes. We accept Cryptocurrencies. Crypto payments are the fastest and guarantee total anonymity.' },
+    { h:'HOW DOES THE PAYPAL TOP-UP WORK?', p:'After payment, funds are transferred to your PayPal within 1-4 hours via Friends & Family. No visible fees and the balance is immediately available and withdrawable.' },
+    { h:'IS MY DATA SAFE?', p:'We store no personal data. Telegram chats are encrypted and logs are deleted every 24 hours. We never ask for documents or identifying info.' },
+    { h:'SECURITY PROTOCOLS', list:['End-to-end encrypted communications','No personal data retention','Anonymous transactions via crypto','Offshore servers in safe jurisdictions'] }
+  ]},
+  privacy:{ title:'PRIVACY POLICY', updated:'Last updated: April 2026. Data processing compliant with current regulations, advanced encryption and no third-party sharing.', sections:[
+    { h:'1. DATA COLLECTION', p:'GUSTAVOEURO collects only the data strictly necessary to provide the requested services. Personal data is processed in compliance with current data-protection regulations. Types: contact data provided voluntarily; technical browsing data (IP, browser, device); essential technical cookies.' },
+    { h:'2. PURPOSE', p:'Data is used for: handling contact requests; improving user experience; legal compliance; platform security.' },
+    { h:'3. RETENTION & SECURITY', p:'Data is kept for the time strictly necessary and protected with advanced encryption. Securely deleted at the end of the period.' },
+    { h:'4. DATA SUBJECT RIGHTS', p:'Users may access their data, request rectification or deletion, and object to processing at any time by contacting the operator via official channels.' },
+    { h:'5. DATA TRANSFER', p:'GUSTAVOEURO does not transfer, sell or share personal data with third parties, except where required by law.' }
+  ]},
+  terms:{ title:'TERMS & CONDITIONS', updated:'Last updated: April 2026. Platform terms of use, liability and operating rules of the circle.', sections:[
+    { h:'1. ACCEPTANCE', p:'Accessing and using GUSTAVOEURO implies full acceptance of these Terms. If you do not accept them, do not use the services.' },
+    { h:'2. SERVICE DESCRIPTION', p:'GUSTAVOEURO is an informational platform providing access to digital content. The user acknowledges all content is for informational and entertainment purposes only.' },
+    { h:'3. USER CONDUCT', p:'The user agrees to: not use the service for illegal purposes; not compromise security; not share confidential info; respect intellectual property.' },
+    { h:'4. LIABILITY LIMITATION', p:'GUSTAVOEURO is not liable for direct or indirect damages from use or inability to use. Content provided "as is", without warranties.' },
+    { h:'5. CHANGES', p:'GUSTAVOEURO may modify the terms at any time; changes are effective upon publication.' }
+  ]},
+  cookies:{ title:'COOKIE POLICY', updated:'Last updated: October 2026. We use only essential technical cookies.', sections:[
+    { h:'1. WHAT ARE COOKIES', p:'Small text files stored on your device when you visit a site. GUSTAVOEURO uses only essential technical cookies.' },
+    { h:'2. TYPES', p:'Essential technical cookies: session (browsing), security (attack protection), preferences (user settings). GUSTAVOEURO does NOT use profiling or tracking cookies.' },
+    { h:'3. MANAGEMENT', p:'You can manage them from browser settings; disabling technical cookies may affect functionality.' },
+    { h:'4. THIRD-PARTY COOKIES', p:'None; no sharing with external advertising/analytics platforms.' },
+    { h:'5. DURATION', p:'Maximum session duration or 24 hours; no long-term persistent cookies.' },
+    { h:'6. UPDATES', p:'The Policy may be updated; check it regularly.' }
+  ]}
+},
+fr:{
+  common:{ back:'← RETOUR', access:'ACCÉDER', copy:'COPIER', copied:'COPIÉ ✓', total:'TOTAL', qty:'Quantité', remove:'Retirer', checkout:'PASSER AU PAIEMENT', empty:'Le panier est vide.', free:'LIVRAISON GRATUITE', tracking:'Après l\u2019expédition nous envoyons TOUJOURS le code de suivi.', cart:'PANIER', close:'Fermer' },
+  boot:{ enter:'INITIALISATION DU CANAL' },
+  gate:{ title:'ACCÈS RESTREINT', sub:'SAISISSEZ LE CODE POUR ACCÉDER', wrong:'CODE INVALIDE', hint:'Code fourni sur invitation' },
+  cryptoLoading:{ title:'ACCÈS CHIFFRÉ', l1:'Connexion de bout en bout active', l2:'Vérification du canal sécurisé', l3:'Clé de session générée', done:'CANAL SÉCURISÉ ÉTABLI' },
+  home:{ hero:'BIENVENUE. UN CERCLE OPÉRATIONNEL PRIVÉ, ACCESSIBLE UNIQUEMENT SUR INVITATION. NOUS LIVRONS UNIQUEMENT DES RÉSULTATS À CEUX QUI SAVENT DÉJÀ QUOI DEMANDER. NOUS NE SOMMES PAS LÀ POUR JOUER, SEULEMENT DES PERSONNES SÉRIEUSES ET DÉSIRANTES DE CHANGER LEUR VIE !', contact:'CONTACTE-MOI', bank:'BILLETS EURO', paypal:'RECHARGES PAYPAL', reviews:'AVIS', faq:'FAQ & SÉCURITÉ', privacy:'POLITIQUE DE CONFIDENTIALITÉ', terms:'TERMES ET CONDITIONS', cookies:'POLITIQUE DE COOKIES', status:'CONNEXION CHIFFRÉE // CANAL SÉCURISÉ // V2.4.1' },
+  contact:{ q:'AS-TU TELEGRAM ?', yes:'OUI, J\u2019AI TELEGRAM', no:'NON, JE N\u2019AI PAS TELEGRAM', install:'INSTALLER TELEGRAM', installHint:'Installe Telegram, puis reviens ici et appuie sur OUI.' },
+  bank:{ choose:'CHOISIS LA COUPURE', mixed:'MIXTE', qty:'billets', unit:'par billet', complete:'COMMANDER MAINTENANT', addCart:'AJOUTER AU PANIER', added:'AJOUTÉ ✓' },
+  paypal:{ whatTitle:'QUE SONT LES RECHARGES PAYPAL', what:'Nous rechargeons ton solde PayPal par un virement rapide via Amis et Famille. Sans frais visibles : tu paies un montant et reçois un solde supérieur, immédiatement disponible et retirable.', ok:'OUI, COMPRIS', no:'NON, JE PRÉFÈRE PAS', price:'Tu paies', balance:'Tu reçois', telegramQ:'AS-TU UN COMPTE TELEGRAM ACTIF ?', telegramYes:'OUI, PASSER À LA COMMANDE', telegramNo:'NON, PAS DE COMPTE TELEGRAM', emailTitle:'VÉRIFIER L\u2019EMAIL PAYPAL', emailHint:'Saisis ton email ou pseudo PayPal deux fois.', emailPh:'email ou pseudo PayPal', emailRepeat:'répète email ou pseudo PayPal', mismatch:'LES DEUX VALEURS NE CORRESPONDENT PAS', verify:'VÉRIFIER ET CONTINUER', verifying:'VÉRIFICATION' },
+  ship:{ title:'DONNÉES D\u2019EXPÉDITION', address:'Adresse', civic:'Numéro', zip:'Code postal', email:'Email', phone:'Mobile', carrier:'CHOISIR LE TRANSPORTEUR', locker:'Rue du locker', free:'L\u2019EXPÉDITION EST GRATUITE', next:'ALLER AU PAIEMENT', required:'Remplis tous les champs' },
+  pay:{ secure:'PROTECTION DE BOUT EN BOUT // CHIFFREMENT ACTIF', accept:'Nous acceptons uniquement ces moyens de paiement', crypto:'CRYPTO', cryptoSub:'Le seul paiement anonyme et réalisable directement sur le site', bank:'VIREMENT INSTANTANÉ', amazon:'BONS AMAZON' },
+  crypto:{ walletQ:'AS-TU DÉJÀ UN PORTEFEUILLE CRYPTO ?', walletYes:'OUI, J\u2019AI DÉJÀ UN PORTEFEUILLE', walletNo:'NON, PAS DE PORTEFEUILLE', confirm:'CONFIRMER LA COMMANDE', choose:'CHOISIS LA CRYPTOMONNAIE', waitExchange:'En attente de confirmation de l\u2019exchange', waitChain:'En attente de confirmation de la blockchain', completed:'COMMANDE TERMINÉE', processing:'NOUS TRAITONS TA COMMANDE', info:'Pour le code de suivi et infos :', pending:'COMMANDE PAS ENCORE PRISE — PAIEMENT NON REÇU', failed:'PAIEMENT NON EFFECTUÉ — REVIENS EN ARRIÈRE POUR TERMINER' },
+  bankTransfer:{ q:'POUR CE PAIEMENT, TELEGRAM EST NÉCESSAIRE', yes:'OUI, J\u2019AI TELEGRAM', no:'NON, PAS DE TELEGRAM', hint:'Tes données d\u2019expédition ont été copiées : colle-les dans le chat.' },
+  amazon:{ q:'AS-TU DÉJÀ UN BON AMAZON ?', yes:'OUI, JE L\u2019AI', insert:'SAISIS LE CODE DU BON', codePh:'CODE BON AMAZON', send:'ENVOYER' },
+  reviews:{ q:'POUR VOIR LES AVIS, TELEGRAM EST NÉCESSAIRE !', yes:'OUI, J\u2019AI DÉJÀ TELEGRAM', no:'NON, PAS DE TELEGRAM' },
+  faq:{ title:'FAQ & SÉCURITÉ', items:[
+    { h:'CONNEXION SÉCURISÉE', p:'Chiffrement de bout en bout actif // Aucun log conservé' },
+    { h:'COMMENT FONCTIONNE L\u2019EXPÉDITION ?', p:'Tous les colis sont expédiés en mode stealth avec emballage anonyme. L\u2019emballage extérieur ne révèle pas le contenu. Transporteurs fiables et suivi sur Telegram. Délais moyens : UE 48-72h, Hors UE 5-7 jours.' },
+    { h:'ACCEPTEZ-VOUS LES PAIEMENTS ANONYMES ?', p:'Oui. Nous acceptons les cryptomonnaies. Les paiements crypto sont les plus rapides et garantissent l\u2019anonymat total.' },
+    { h:'COMMENT FONCTIONNE LA RECHARGE PAYPAL ?', p:'Après paiement, les fonds sont transférés sur ton PayPal en 1-4 h via Amis et Famille. Sans frais visibles et solde immédiatement disponible et retirable.' },
+    { h:'MES DONNÉES SONT-ELLES SÛRES ?', p:'Aucune donnée personnelle conservée. Les chats Telegram sont chiffrés et les logs supprimés toutes les 24 h. Jamais de documents ni d\u2019infos identifiantes.' },
+    { h:'PROTOCOLES DE SÉCURITÉ', list:['Communications chiffrées de bout en bout','Aucune conservation de données personnelles','Transactions anonymes via crypto','Serveurs offshore en juridictions sûres'] }
+  ]},
+  privacy:{ title:'POLITIQUE DE CONFIDENTIALITÉ', updated:'Dernière mise à jour : Avril 2026. Traitement conforme à la réglementation, chiffrement avancé et aucun partage avec des tiers.', sections:[
+    { h:'1. COLLECTE DES DONNÉES', p:'GUSTAVOEURO collecte uniquement les données strictement nécessaires. Les données sont traitées conformément à la réglementation. Types : données de contact volontaires ; données techniques (IP, navigateur, appareil) ; cookies techniques essentiels.' },
+    { h:'2. FINALITÉS', p:'Données utilisées pour : gestion des demandes ; amélioration de l\u2019expérience ; obligations légales ; sécurité de la plateforme.' },
+    { h:'3. CONSERVATION ET SÉCURITÉ', p:'Données conservées le temps nécessaire et protégées par chiffrement avancé. Supprimées de façon sûre à la fin de la période.' },
+    { h:'4. DROITS', p:'L\u2019utilisateur peut accéder à ses données, demander rectification ou suppression, et s\u2019opposer au traitement à tout moment via les canaux officiels.' },
+    { h:'5. TRANSFERT', p:'GUSTAVOEURO ne transfère, vend ni partage les données personnelles, sauf obligation légale.' }
+  ]},
+  terms:{ title:'TERMES ET CONDITIONS', updated:'Dernière mise à jour : Avril 2026. Conditions d\u2019utilisation, responsabilité et règles du cercle.', sections:[
+    { h:'1. ACCEPTATION', p:'L\u2019accès et l\u2019utilisation de GUSTAVOEURO impliquent l\u2019acceptation intégrale des présents Termes. Sinon, n\u2019utilise pas les services.' },
+    { h:'2. DESCRIPTION', p:'GUSTAVOEURO est une plateforme informative donnant accès à des contenus numériques, à but informatif et de divertissement.' },
+    { h:'3. CONDUITE', p:'L\u2019utilisateur s\u2019engage à : ne pas utiliser le service à des fins illégales ; ne pas compromettre la sécurité ; ne pas partager d\u2019infos confidentielles ; respecter la propriété intellectuelle.' },
+    { h:'4. RESPONSABILITÉ', p:'GUSTAVOEURO n\u2019est pas responsable des dommages directs ou indirects liés à l\u2019usage. Contenus fournis "tels quels", sans garantie.' },
+    { h:'5. MODIFICATIONS', p:'GUSTAVOEURO peut modifier les termes à tout moment ; les changements prennent effet dès publication.' }
+  ]},
+  cookies:{ title:'POLITIQUE DE COOKIES', updated:'Dernière mise à jour : Octobre 2026. Nous utilisons uniquement des cookies techniques essentiels.', sections:[
+    { h:'1. QUE SONT LES COOKIES', p:'Petits fichiers texte stockés sur ton appareil lors de la visite. GUSTAVOEURO n\u2019utilise que des cookies techniques essentiels.' },
+    { h:'2. TYPES', p:'Cookies techniques essentiels : session (navigation), sécurité (protection), préférences (réglages). GUSTAVOEURO n\u2019utilise PAS de cookies de profilage ou tracking.' },
+    { h:'3. GESTION', p:'Gérables depuis le navigateur ; désactiver les cookies techniques peut nuire au fonctionnement.' },
+    { h:'4. TIERS', p:'Aucun ; pas de partage avec des plateformes publicitaires/analytics externes.' },
+    { h:'5. DURÉE', p:'Durée maximale de session ou 24 h ; aucun cookie persistant à long terme.' },
+    { h:'6. MISES À JOUR', p:'La Politique peut être mise à jour ; consulte-la régulièrement.' }
+  ]}
+}
+};
+
+/* ============================================================
+   3. UTILS
+============================================================ */
+const LOCALES = { it:'it-IT', es:'es-ES', en:'en-GB', fr:'fr-FR' };
+const money = (v, lang) => new Intl.NumberFormat(LOCALES[lang]||'it-IT', { style:'currency', currency:'EUR' }).format(v);
+const num = (v, lang) => new Intl.NumberFormat(LOCALES[lang]||'it-IT').format(v);
+const clsx = (...a) => a.filter(Boolean).join(' ');
+const resolve = (obj, path) => path.split('.').reduce((o,k) => (o && o[k] !== undefined ? o[k] : undefined), obj);
+const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+async function copyText(text){ try { await navigator.clipboard.writeText(text); return true; } catch { return false; } }
+
+function buildOrderMessage(items, ship, lang){
+  const lines = items.map(i => `• ${i.title} — ${i.sub} × ${i.qty} = ${money(i.unit*i.qty, lang)}`);
+  const total = items.reduce((t,i) => t + i.unit*i.qty, 0);
+  return ['🟡 NUOVO ORDINE — GUSTAVOEURO','', ...lines, '', `TOTALE: ${money(total, lang)}`, '',
+    'DATI SPEDIZIONE', `Indirizzo: ${ship.address} ${ship.civic}`, `CAP: ${ship.zip}`,
+    `Email: ${ship.email}`, `Cellulare: ${ship.prefix} ${ship.phone}`,
+    `Corriere: ${ship.shipper}${ship.locker ? ` — Locker: ${ship.locker}` : ''}`].join('\n');
+}
+
+/* ============================================================
+   4. ROUTER (hash)
+============================================================ */
+function useRoute(){
+  const [path, setPath] = useState(() => (window.location.hash || '#/').slice(1) || '/');
+  useEffect(() => {
+    const on = () => { setPath((window.location.hash || '#/').slice(1) || '/'); window.scrollTo(0,0); };
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  return path;
+}
+const nav = (p) => { window.location.hash = p; };
+
+/* ============================================================
+   5. CONTEXT (i18n, carrello, ordine)
+============================================================ */
+const I18nCtx = createContext();
+function I18nProvider({ children }){
+  const [lang, setLang] = useState(() => localStorage.getItem('ge-lang') || 'it');
+  useEffect(() => { localStorage.setItem('ge-lang', lang); document.documentElement.lang = lang; }, [lang]);
+  const t = useCallback((k, vars) => {
+    let v = resolve(T[lang], k);
+    if (v === undefined) v = resolve(T.it, k);
+    if (typeof v === 'string' && vars) for (const key in vars) v = v.replace(`{${key}}`, vars[key]);
+    return v;
+  }, [lang]);
+  return <I18nCtx.Provider value={{ lang, setLang, t }}>{children}</I18nCtx.Provider>;
+}
+const useT = () => useContext(I18nCtx);
+
+const CartCtx = createContext();
+function CartProvider({ children }){
+  const [items, setItems] = useState(() => { try { return JSON.parse(localStorage.getItem('ge-cart')) || []; } catch { return []; } });
+  const [open, setOpen] = useState(false);
+  useEffect(() => { localStorage.setItem('ge-cart', JSON.stringify(items)); }, [items]);
+  const add = useCallback((item) => setItems(prev => {
+    const ex = prev.find(i => i.id === item.id);
+    if (ex) return prev.map(i => i.id === item.id ? { ...i, qty: i.qty + item.qty } : i);
+    return [...prev, item];
+  }), []);
+  const remove = useCallback(id => setItems(p => p.filter(i => i.id !== id)), []);
+  const setQty = useCallback((id, qty) => setItems(p => p.map(i => i.id === id ? { ...i, qty: Math.max(1, qty) } : i)), []);
+  const clear = useCallback(() => setItems([]), []);
+  const total = items.reduce((t,i) => t + i.unit*i.qty, 0);
+  const count = items.reduce((n,i) => n + i.qty, 0);
+  return <CartCtx.Provider value={{ items, open, setOpen, add, remove, setQty, clear, total, count }}>{children}</CartCtx.Provider>;
+}
+const useCart = () => useContext(CartCtx);
+
+const OrderCtx = createContext();
+const EMPTY_SHIP = { address:'', civic:'', zip:'', email:'', prefix:'+39', phone:'', shipper:'', locker:'' };
+function OrderProvider({ children }){
+  const [order, setOrder] = useState(() => { try { return JSON.parse(localStorage.getItem('ge-order')) || { shipping: EMPTY_SHIP, paypalEmail:'', method:'', coin:'', voucher:'' }; } catch { return { shipping: EMPTY_SHIP, paypalEmail:'', method:'', coin:'', voucher:'' }; } });
+  useEffect(() => { localStorage.setItem('ge-order', JSON.stringify(order)); }, [order]);
+  const setShipping = useCallback(p => setOrder(o => ({ ...o, shipping: { ...o.shipping, ...p } })), []);
+  const set = useCallback(p => setOrder(o => ({ ...o, ...p })), []);
+  return <OrderCtx.Provider value={{ order, setShipping, set }}>{children}</OrderCtx.Provider>;
+}
+const useOrder = () => useContext(OrderCtx);
+
+/* ============================================================
+   6. UI PRIMITIVI
+============================================================ */
+const Button = ({ variant='gold', className='', ...r }) =>
+  <button className={clsx('btn', variant==='gold'?'btn-gold':'btn-ghost', className)} {...r} />;
+
+const GlassPanel = ({ className='', ...r }) => <div className={clsx('glass p-6', className)} {...r} />;
+
+const BackButton = ({ to })=>{
+  const { t } = useT();
+  return <Button variant="ghost" onClick={() => to ? nav(to) : history.back()}>{t('common.back')}</Button>;
+};
+
+function Img({ src, alt='', className='', fallback='◆' }){
+  const [err, setErr] = useState(false);
+  if (err || !src) return <div className={clsx(className, 'flex items-center justify-center bg-gradient-to-br from-graphite to-ink text-gold/40 text-2xl')}>{fallback}</div>;
+  return <img src={src} alt={alt} className={className} loading="lazy" decoding="async" onError={() => setErr(true)} />;
+}
+
+const Screen = ({ children, className='' }) => <div className={clsx('screen', className)}>{children}</div>;
+
+/* ============================================================
+   7. LAYOUT (header, footer, drawer)
+============================================================ */
+function Header(){
+  const { t, lang, setLang } = useT();
+  const { open, setOpen, count } = useCart();
+  const [langOpen, setLangOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const on = (e) => { if (ref.current && !ref.current.contains(e.target)) setLangOpen(false); };
+    document.addEventListener('mousedown', on);
+    return () => document.removeEventListener('mousedown', on);
+  }, []);
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-gold/15 bg-ink/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+        <a href="#/home" className="flex items-center gap-3" aria-label="Home">
+          <Img src={IMG.logo} alt="GustavoEuro" className="h-9 w-9 rounded-full object-cover ring-1 ring-gold/40" fallback="G" />
+          <span className="gold-text hidden text-sm sm:inline">GUSTAVOEURO</span>
+        </a>
+        <div className="flex items-center gap-2">
+          <div className="relative" ref={ref}>
+            <button onClick={() => setLangOpen(v => !v)} aria-label="Language"
+              className="rounded-full border border-gold/25 px-3 py-2 text-xs uppercase tracking-widest text-cream/80 hover:border-gold/60">
+              {lang.toUpperCase()}
+            </button>
+            {langOpen && (
+              <ul className="glass drawer-enter absolute right-0 mt-2 w-40 overflow-hidden p-1 text-sm">
+                {LANGS.map(l => (
+                  <li key={l.code}>
+                    <button onClick={() => { setLang(l.code); setLangOpen(false); }}
+                      className={clsx('w-full rounded-lg px-3 py-2 text-left tracking-widest', lang===l.code ? 'text-gold' : 'text-cream/80 hover:bg-gold/10')}>
+                      {l.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <button onClick={() => setOpen(true)} aria-label={t('common.cart')}
+            className="relative rounded-full border border-gold/25 px-3 py-2 text-cream/80 hover:border-gold/60">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H2"/>
+            </svg>
+            {count > 0 && <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gold px-1 text-[10px] font-bold text-ink">{count}</span>}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Footer(){
+  const { t } = useT();
+  return (
+    <footer className="relative z-10 border-t border-gold/15 px-4 py-10 text-center sm:px-6">
+      <nav className="mb-6 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs uppercase tracking-[0.16em] text-cream/60">
+        <a className="link-u" href="#/privacy">{t('home.privacy')}</a>
+        <a className="link-u" href="#/terms">{t('home.terms')}</a>
+        <a className="link-u" href="#/cookies">{t('home.cookies')}</a>
+      </nav>
+      <p className="text-[10px] tracking-[0.28em] text-cream/25">{t('home.status')}</p>
+    </footer>
+  );
+}
+
+function CartDrawer(){
+  const { t, lang } = useT();
+  const { items, open, setOpen, remove, setQty, total } = useCart();
+  if (!open) return null;
+  return (
+    <>
+      <div onClick={() => setOpen(false)} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+      <aside className="drawer-enter fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col border-l border-gold/20 bg-graphite/95 backdrop-blur-2xl">
+        <div className="flex items-center justify-between border-b border-gold/15 px-6 py-5">
+          <h2 className="gold-text text-lg">{t('common.cart')}</h2>
+          <button onClick={() => setOpen(false)} aria-label={t('common.close')} className="text-cream/60 hover:text-gold text-xl">✕</button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          {items.length === 0 && <p className="py-10 text-center text-cream/50">{t('common.empty')}</p>}
+          {items.map(i => (
+            <div key={i.id} className="mb-4 flex gap-4 border-b border-gold/10 pb-4">
+              <Img src={i.image} className="h-16 w-16 shrink-0 rounded-lg object-cover ring-1 ring-gold/20" fallback="◆" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">{i.title}</p>
+                <p className="text-xs text-cream/50">{i.sub}</p>
+                <p className="mt-1 text-xs text-gold">{money(i.unit, lang)}</p>
+                <div className="mt-2 flex items-center gap-3">
+                  <input type="number" min="1" value={i.qty} onChange={e => setQty(i.id, +e.target.value)}
+                    aria-label={t('common.qty')} className="w-14 rounded-md border border-gold/20 bg-graphite2 px-2 py-1 text-xs text-cream" />
+                  <button onClick={() => remove(i.id)} className="text-xs text-cream/50 hover:text-red-400">{t('common.remove')}</button>
+                </div>
+              </div>
+              <p className="text-sm text-gold">{money(i.unit*i.qty, lang)}</p>
+            </div>
+          ))}
+        </div>
+        {items.length > 0 && (
+          <div className="border-t border-gold/15 px-6 py-5">
+            <div className="mb-4 flex justify-between">
+              <span className="text-sm uppercase tracking-widest text-cream/70">{t('common.total')}</span>
+              <span className="text-lg text-gold">{money(total, lang)}</span>
+            </div>
+            <Button className="w-full" onClick={() => { setOpen(false); nav('/checkout/shipping'); }}>{t('common.checkout')}</Button>
+          </div>
+        )}
+      </aside>
+    </>
+  );
+}
+
+const Page = ({ children }) => (
+  <Screen className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-24 pt-24 sm:px-6">{children}</Screen>
+);
+
+/* ============================================================
+   8. SCHERMATE INIZIALI
+============================================================ */
+function BootLoading(){
+  const { t } = useT();
+  useEffect(() => { const id = setTimeout(() => nav('/gate'), 2600); return () => clearTimeout(id); }, []);
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-8">
+      <Img src={IMG.logo} alt="GustavoEuro" className="h-32 w-32 rounded-2xl object-cover ring-1 ring-gold/30 shadow-glow animate-pop sm:h-40 sm:w-40" fallback="G" />
+      <p className="text-xs uppercase tracking-[0.4em] text-gold/70 animate-fadeUp" style={{ animationDelay:'1.1s' }}>{t('boot.enter')}</p>
+    </div>
+  );
+}
+
+function AccessGate(){
+  const { t } = useT();
+  const [code, setCode] = useState('');
+  const [err, setErr] = useState(false);
+  const submit = (e) => {
+    e.preventDefault();
+    if (code.trim().toUpperCase() === ACCESS_CODE) nav('/crypto-loading');
+    else { setErr(true); setTimeout(() => setErr(false), 700); }
+  };
+  return (
+    <div className="flex min-h-dvh items-center justify-center px-4">
+      <Screen className="w-full max-w-sm">
+        <GlassPanel className="text-center">
+          <Img src={IMG.logo} alt="" className="mx-auto mb-6 h-16 w-16 rounded-full object-cover ring-1 ring-gold/30" fallback="G" />
+          <h1 className="gold-text text-2xl">{t('gate.title')}</h1>
+          <p className="mt-2 text-xs uppercase tracking-[0.24em] text-cream/50">{t('gate.sub')}</p>
+          <form onSubmit={submit} className="mt-8 space-y-4" style={err ? { animation:'pop .4s' } : {}}>
+            <input value={code} onChange={e => setCode(e.target.value)} autoFocus aria-label={t('gate.sub')}
+              className="input text-center uppercase tracking-[0.4em]" placeholder="• • • • • • • •" />
+            <Button type="submit" className="w-full">{t('common.access')}</Button>
+            {err && <p className="text-xs tracking-widest text-red-400">{t('gate.wrong')}</p>}
+          </form>
+          <p className="mt-6 text-[10px] uppercase tracking-[0.3em] text-cream/25">{t('gate.hint')}</p>
+        </GlassPanel>
+      </Screen>
+    </div>
+  );
+}
+
+function CryptoLoading(){
+  const { t } = useT();
+  const [p, setP] = useState(1);
+  useEffect(() => {
+    const start = performance.now(), dur = 2600;
+    let raf;
+    const tick = (now) => {
+      const k = Math.min(1, (now - start) / dur);
+      setP(Math.max(1, Math.round(k * 100)));
+      if (k < 1) raf = requestAnimationFrame(tick); else setTimeout(() => nav('/home'), 350);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  const line = p < 40 ? t('cryptoLoading.l1') : p < 75 ? t('cryptoLoading.l2') : t('cryptoLoading.l3');
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center px-6">
+      <h1 className="gold-text text-xl sm:text-2xl">{t('cryptoLoading.title')}</h1>
+      <p className="mt-3 text-sm text-crypto">{line}…</p>
+      <div className="mt-8 h-1 w-full max-w-md overflow-hidden rounded-full bg-graphite2">
+        <div className="h-full bg-gradient-to-r from-gold to-goldsoft" style={{ width: p + '%', transition:'width .1s linear' }} />
+      </div>
+      <p className="mt-4 font-mono text-3xl text-gold">{String(p).padStart(3,'0')}%</p>
+      {p === 100 && <p className="mt-3 text-xs uppercase tracking-[0.3em] text-crypto">{t('cryptoLoading.done')}</p>}
+    </div>
+  );
+}
+
+/* ============================================================
+   9. HOME
+============================================================ */
+function Home(){
+  const { t } = useT();
+  const entries = [
+    { to:'/contact', label:t('home.contact') },
+    { to:'/banknotes', label:t('home.bank') },
+    { to:'/paypal', label:t('home.paypal') },
+    { to:'/reviews', label:t('home.reviews') },
+    { to:'/faq', label:t('home.faq') },
+  ];
+  return (
+    <Page>
+      <div className="flex flex-col items-center text-center">
+        <Img src={IMG.logo} alt="GustavoEuro" className="h-40 w-40 rounded-3xl object-cover ring-1 ring-gold/30 shadow-glow sm:h-56 sm:w-56 animate-pop" fallback="G" />
+        <h1 className="gold-text mt-8 text-2xl underline decoration-gold/40 underline-offset-[10px] animate-fadeUp sm:text-3xl" style={{ animationDelay:'.2s' }}>GUSTAVOEURO</h1>
+        <p className="mt-10 max-w-2xl text-sm leading-relaxed tracking-wide text-cream/85 underline decoration-gold/30 underline-offset-4 animate-fadeUp sm:text-base" style={{ animationDelay:'.4s' }}>{t('home.hero')}</p>
+      </div>
+      <ul className="mt-16 space-y-3">
+        {entries.map((e, i) => (
+          <li key={e.to} className="animate-fadeUp" style={{ animationDelay: (0.55 + i*0.09) + 's' }}>
+            <a href={'#'+e.to} className="group flex items-center justify-between rounded-2xl border border-gold/15 bg-graphite/40 px-6 py-5 backdrop-blur-md transition-all duration-300 hover:border-gold/50 hover:bg-gold/5">
+              <span className="font-serif text-lg tracking-[0.2em] text-cream group-hover:text-gold">{e.label}</span>
+              <span className="text-gold transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Page>
+  );
+}
+
+/* ============================================================
+   10. CONTATTI
+============================================================ */
+function Contact(){
+  const { t } = useT();
+  const [no, setNo] = useState(false);
+  const store = isMobile() && /Android/i.test(navigator.userAgent) ? TELEGRAM.android : TELEGRAM.ios;
+  return (
+    <Page>
+      <h1 className="gold-text mb-8 text-center text-xl">{t('contact.q')}</h1>
+      <GlassPanel className="space-y-4">
+        <a href={TELEGRAM.direct} target="_blank" rel="noreferrer" className="block"><Button className="w-full">{t('contact.yes')}</Button></a>
+        <Button variant="ghost" className="w-full" onClick={() => setNo(true)}>{t('contact.no')}</Button>
+        {no && (
+          <div className="space-y-3 border-t border-gold/15 pt-4 text-center">
+            <p className="text-xs text-cream/60">{t('contact.installHint')}</p>
+            <a href={store} target="_blank" rel="noreferrer"><Button variant="ghost" className="w-full">{t('contact.install')}</Button></a>
+            <BackButton />
+          </div>
+        )}
+      </GlassPanel>
+      <div className="mt-6 flex justify-center"><BackButton to="/home" /></div>
+    </Page>
+  );
+}
+
+/* ============================================================
+   11. BANCONOTE
+============================================================ */
+function Banknotes(){
+  const { t } = useT();
+  return (
+    <Page>
+      <h1 className="gold-text mb-8 text-center text-xl">{t('bank.choose')}</h1>
+      <div className="grid grid-cols-2 gap-4">
+        {['10','20','50','MIX'].map(d => (
+          <a key={d} href={'#/banknotes/'+d} className="group overflow-hidden rounded-2xl border border-gold/15 bg-graphite/40 transition-all hover:border-gold/50 hover:shadow-glow">
+            <Img src={IMG[d]} className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105" fallback={d==='MIX'?'MIX':d+' €'} />
+            <p className="py-4 text-center font-serif text-lg tracking-[0.2em] text-cream group-hover:text-gold">{d==='MIX'?t('bank.mixed'):d+' €'}</p>
+          </a>
+        ))}
+      </div>
+      <div className="mt-8 flex justify-center"><BackButton to="/home" /></div>
+    </Page>
+  );
+}
+
+function BanknoteTier({ denom }){
+  const { t, lang } = useT();
+  const { add } = useCart();
+  const [sel, setSel] = useState(null);
+  const [added, setAdded] = useState(false);
+  const groups = denom === 'MIX' ? ['10','20','50'] : [denom];
+  const img = IMG[denom] || IMG.MIX;
+
+  const build = () => ({
+    id: `bank-${sel.d}-${sel.qty}`, kind:'banknote',
+    title: `BANCONOTE ${sel.d} €`, sub: `${num(sel.qty, lang)} ${t('bank.qty')}`,
+    image: IMG[sel.d], unit: sel.total, qty: 1,
+  });
+
+  return (
+    <Page>
+      <div className="mb-6 overflow-hidden rounded-2xl border border-gold/15">
+        <Img src={img} className="aspect-[16/9] w-full object-cover" fallback={denom==='MIX'?'MISTO':denom+' €'} />
+      </div>
+      {denom === 'MIX' && <h1 className="gold-text mb-6 text-center text-xl">{t('bank.mixed')}</h1>}
+
+      {groups.map(d => (
+        <div key={d} className="mb-6">
+          {denom === 'MIX' && <p className="mb-3 font-serif text-lg tracking-[0.2em] text-gold">BANCONOTE {d} €</p>}
+          <ul className="space-y-2">
+            {rowsOf(d).map(r => {
+              const active = sel && sel.d === d && sel.qty === r.qty;
+              return (
+                <li key={r.qty}>
+                  <button onClick={() => { setSel({ d, ...r }); setAdded(false); }}
+                    className={clsx('flex w-full items-center justify-between rounded-xl border px-5 py-4 transition-all',
+                      active ? 'border-gold bg-gold/10 shadow-glow' : 'border-gold/15 bg-graphite/40 hover:border-gold/40')}>
+                    <span className="font-serif text-lg text-gold">{money(r.total, lang)}</span>
+                    <span className="text-sm text-cream/80">{num(r.qty, lang)} {t('bank.qty')} · {money(r.unit, lang)} {t('bank.unit')}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+
+      {sel && (
+        <div className="flex animate-fadeUp flex-col gap-3 sm:flex-row">
+          <Button className="flex-1" onClick={() => nav('/checkout/shipping')}>{t('bank.complete')}</Button>
+          <Button variant="ghost" className="flex-1" onClick={() => { add(build()); setAdded(true); }}>
+            {added ? t('bank.added') : t('bank.addCart')}
+          </Button>
+        </div>
+      )}
+      <div className="mt-8 flex justify-center"><BackButton to="/banknotes" /></div>
+    </Page>
+  );
+}
+
+/* ============================================================
+   12. PAYPAL
+============================================================ */
+function Paypal(){
+  const { t, lang } = useT();
+  const { add } = useCart();
+  const [step, setStep] = useState('intro');
+  return (
+    <Page>
+      <h1 className="gold-text mb-6 text-center text-xl">{t('paypal.whatTitle')}</h1>
+      <Img src={IMG.paypal} className="mb-6 aspect-[16/9] w-full rounded-2xl border border-gold/15 object-cover" fallback="PAYPAL" />
+
+      {step === 'intro' ? (
+        <GlassPanel className="space-y-4">
+          <p className="text-sm leading-relaxed text-cream/80">{t('paypal.what')}</p>
+          <Button className="w-full" onClick={() => setStep('list')}>{t('paypal.ok')}</Button>
+          <BackButton to="/home" />
+        </GlassPanel>
+      ) : (
+        <ul className="space-y-2">
+          {PAYPAL.map(p => (
+            <li key={p.price}>
+              <button onClick={() => {
+                add({ id:`paypal-${p.price}`, kind:'paypal', title:'RICARICA PAYPAL', sub:`${t('paypal.price')} ${money(p.price, lang)}`, image:IMG.paypal, unit:p.price, qty:1 });
+                nav('/paypal/verify/' + p.price);
+              }} className="flex w-full items-center justify-between rounded-xl border border-gold/15 bg-graphite/40 px-5 py-4 transition-all hover:border-gold/50 hover:shadow-glow">
+                <span className="text-sm text-cream/80">{t('paypal.price')} <b className="text-gold">{money(p.price, lang)}</b></span>
+                <span className="text-sm text-crypto">{t('paypal.balance')} <b>{money(p.balance, lang)}</b></span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {step === 'list' && <div className="mt-6 flex justify-center"><BackButton to="/home" /></div>}
+    </Page>
+  );
+}
+
+function PaypalVerify({ price }){
+  const { t } = useT();
+  const { set } = useOrder();
+  const [phase, setPhase] = useState('telegram');
+  const [no, setNo] = useState(false);
+  const [a, setA] = useState(''), [b, setB] = useState('');
+  const [err, setErr] = useState(false);
+
+  const verify = (e) => {
+    e.preventDefault();
+    if (!a || a.trim().toLowerCase() !== b.trim().toLowerCase()) { setErr(true); return; }
+    setErr(false); setPhase('verifying'); set({ paypalEmail: a.trim() });
+    setTimeout(() => nav('/checkout/payment'), 1600);
+  };
+
+  return (
+    <Page>
+      {phase === 'telegram' && (
+        <GlassPanel className="space-y-4 text-center">
+          <h1 className="gold-text text-lg">{t('paypal.telegramQ')}</h1>
+          <a href={TELEGRAM.direct} target="_blank" rel="noreferrer"><Button className="w-full">{t('paypal.telegramYes')}</Button></a>
+          <Button variant="ghost" className="w-full" onClick={() => setNo(true)}>{t('paypal.telegramNo')}</Button>
+          {no && <BackButton />}
+          <button className="text-xs text-gold underline" onClick={() => setPhase('email')}>→ {t('paypal.emailTitle')}</button>
+        </GlassPanel>
+      )}
+      {phase === 'email' && (
+        <GlassPanel className="space-y-4">
+          <h1 className="gold-text text-center text-lg">{t('paypal.emailTitle')}</h1>
+          <p className="text-center text-xs text-cream/60">{t('paypal.emailHint')}</p>
+          <form onSubmit={verify} className="space-y-3">
+            <input className="input" placeholder={t('paypal.emailPh')} value={a} onChange={e => setA(e.target.value)} />
+            <input className="input" placeholder={t('paypal.emailRepeat')} value={b} onChange={e => setB(e.target.value)} />
+            {err && <p className="text-xs text-red-400">{t('paypal.mismatch')}</p>}
+            <Button type="submit" className="w-full">{t('paypal.verify')}</Button>
+          </form>
+          <div className="flex justify-center"><BackButton /></div>
+        </GlassPanel>
+      )}
+      {phase === 'verifying' && (
+        <div className="flex flex-col items-center gap-5 py-20">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-gold/30 border-t-gold" style={{ animation:'spin 1s linear infinite' }} />
+          <p className="text-sm tracking-widest text-gold">{t('paypal.verifying')}…</p>
+        </div>
+      )}
+      <p className="mt-4 text-center text-xs text-cream/40">PayPal · {price} €</p>
+    </Page>
+  );
+}
+
+/* ============================================================
+   13. RECENSIONI + FAQ + LEGAL
+============================================================ */
+function Reviews(){
+  const { t } = useT();
+  const [no, setNo] = useState(false);
+  return (
+    <Page>
+      <GlassPanel className="space-y-4 text-center">
+        <h1 className="gold-text text-lg">{t('reviews.q')}</h1>
+        <a href={TELEGRAM.reviews} target="_blank" rel="noreferrer"><Button className="w-full">{t('reviews.yes')}</Button></a>
+        <Button variant="ghost" className="w-full" onClick={() => setNo(true)}>{t('reviews.no')}</Button>
+        {no && <BackButton />}
+      </GlassPanel>
+      <div className="mt-6 flex justify-center"><BackButton to="/home" /></div>
+    </Page>
+  );
+}
+
+function Faq(){
+  const { t } = useT();
+  const items = t('faq.items');
+  const [open, setOpen] = useState(null);
+  return (
+    <Page>
+      <h1 className="gold-text mb-8 text-center text-xl">{t('faq.title')}</h1>
+      <ul className="space-y-3">
+        {items.map((it, i) => (
+          <li key={i} className="overflow-hidden rounded-2xl border border-gold/15 bg-graphite/40">
+            <button onClick={() => setOpen(open === i ? null : i)} className="flex w-full items-center justify-between px-5 py-4 text-left">
+              <span className="font-serif tracking-[0.1em] text-cream">{it.h}</span>
+              <span className="text-gold transition-transform" style={{ transform: open===i ? 'rotate(45deg)' : 'none' }}>+</span>
+            </button>
+            <div className="grid transition-all duration-300" style={{ gridTemplateRows: open===i ? '1fr' : '0fr' }}>
+              <div className="overflow-hidden">
+                <div className="px-5 pb-5 text-sm leading-relaxed text-cream/75">
+                  {it.p}
+                  {it.list && <ul className="mt-2 space-y-1">{it.list.map((l, k) => <li key={k} className="text-crypto">✓ {l}</li>)}</ul>}
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-8 flex justify-center"><BackButton to="/home" /></div>
+    </Page>
+  );
+}
+
+function Legal({ doc }){
+  const { t } = useT();
+  const sections = t(doc + '.sections');
+  return (
+    <Page>
+      <h1 className="gold-text text-center text-xl">{t(doc + '.title')}</h1>
+      <p className="mt-3 text-center text-xs italic text-cream/50">{t(doc + '.updated')}</p>
+      <div className="mt-8 space-y-6">
+        {sections.map((s, i) => (
+          <section key={i}>
+            <h2 className="mb-2 font-serif text-sm tracking-[0.16em] text-gold">{s.h}</h2>
+            <p className="text-sm leading-relaxed text-cream/75">{s.p}</p>
+          </section>
+        ))}
+      </div>
+      <div className="mt-10 flex justify-center"><BackButton to="/home" /></div>
+    </Page>
+  );
+}
+
+/* ============================================================
+   14. CHECKOUT
+============================================================ */
+function Shipping(){
+  const { t } = useT();
+  const { order, setShipping } = useOrder();
+  const s = order.shipping;
+  const [err, setErr] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!s.address || !s.civic || !s.zip || !s.email || !s.phone || !s.shipper) { setErr(true); return; }
+    setErr(false); nav('/checkout/payment');
+  };
+
+  return (
+    <Page>
+      <h1 className="gold-text mb-6 text-center text-xl">{t('ship.title')}</h1>
+      <GlassPanel>
+        <form onSubmit={submit} className="space-y-3">
+          <input className="input" placeholder={t('ship.address')} value={s.address} onChange={e => setShipping({ address:e.target.value })} />
+          <div className="grid grid-cols-2 gap-3">
+            <input className="input" placeholder={t('ship.civic')} value={s.civic} onChange={e => setShipping({ civic:e.target.value })} />
+            <input className="input" placeholder={t('ship.zip')} value={s.zip} onChange={e => setShipping({ zip:e.target.value })} />
+          </div>
+          <input type="email" className="input" placeholder={t('ship.email')} value={s.email} onChange={e => setShipping({ email:e.target.value })} />
+          <div className="flex gap-3">
+            <select className="input w-28" value={s.prefix} onChange={e => setShipping({ prefix:e.target.value })}>
+              {PREFIXES.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+            <input className="input" placeholder={t('ship.phone')} value={s.phone} onChange={e => setShipping({ phone:e.target.value })} />
+          </div>
+          <p className="pt-2 text-xs uppercase tracking-widest text-cream/50">{t('ship.carrier')}</p>
+          <div className="flex flex-wrap gap-2">
+            {SHIPPERS.map(sh => (
+              <button type="button" key={sh} onClick={() => setShipping({ shipper: sh, locker: sh === 'LOCKER INPOST' ? s.locker : '' })}
+                className={clsx('rounded-full border px-4 py-2 text-xs tracking-widest transition-all',
+                  s.shipper === sh ? 'border-gold bg-gold/15 text-gold' : 'border-gold/20 text-cream/70 hover:border-gold/50')}>{sh}</button>
+            ))}
+          </div>
+          {s.shipper === 'LOCKER INPOST' && <input className="input" placeholder={t('ship.locker')} value={s.locker} onChange={e => setShipping({ locker:e.target.value })} />}
+          <p className="pt-2 text-center text-xs text-crypto">✓ {t('ship.free')} — {t('common.tracking')}</p>
+          {err && <p className="text-center text-xs text-red-400">{t('ship.required')}</p>}
+          <Button type="submit" className="w-full">{t('ship.next')}</Button>
+        </form>
+      </GlassPanel>
+      <div className="mt-6 flex justify-center"><BackButton /></div>
+    </Page>
+  );
+}
+
+function Payment(){
+  const { t } = useT();
+  const { set } = useOrder();
+  const methods = [
+    { id:'crypto', title:t('pay.crypto'), sub:t('pay.cryptoSub'), to:'/checkout/crypto' },
+    { id:'bank', title:t('pay.bank'), sub:'', to:'/checkout/bank' },
+    { id:'amazon', title:t('pay.amazon'), sub:'', to:'/checkout/amazon' },
+  ];
+  return (
+    <Page>
+      <p className="mb-2 text-center text-[10px] uppercase tracking-[0.3em] text-crypto">{t('pay.secure')}</p>
+      <h1 className="gold-text mb-8 text-center text-xl">{t('pay.accept')}</h1>
+      <ul className="space-y-3">
+        {methods.map(m => (
+          <li key={m.id}>
+            <button onClick={() => { set({ method:m.id }); nav(m.to); }}
+              className="w-full rounded-2xl border border-gold/15 bg-graphite/40 px-6 py-5 text-left transition-all hover:border-gold/50 hover:shadow-glow">
+              <span className="font-serif text-lg tracking-[0.18em] text-cream">{m.title}</span>
+              {m.sub && <p className="mt-1 text-xs text-cream/50">{m.sub}</p>}
+            </button>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-8 flex justify-center"><BackButton to="/checkout/shipping" /></div>
+    </Page>
+  );
+}
+
+function Crypto(){
+  const { t } = useT();
+  const { set } = useOrder();
+  const [phase, setPhase] = useState('wallet');
+  const [no, setNo] = useState(false);
+  const [coin, setCoin] = useState(null);
+
+  return (
+    <Page>
+      {phase === 'wallet' && (
+        <GlassPanel className="space-y-4 text-center">
+          <h1 className="gold-text text-lg">{t('crypto.walletQ')}</h1>
+          <Button className="w-full" onClick={() => setPhase('confirm')}>{t('crypto.walletYes')}</Button>
+          <Button variant="ghost" className="w-full" onClick={() => setNo(true)}>{t('crypto.walletNo')}</Button>
+          {no && <BackButton />}
+        </GlassPanel>
+      )}
+      {phase === 'confirm' && (
+        <GlassPanel className="space-y-4">
+          <h1 className="gold-text text-center text-lg">{t('crypto.confirm')}</h1>
+          <p className="text-center text-xs uppercase tracking-widest text-cream/50">{t('crypto.choose')}</p>
+          <div className="grid gap-3">
+            {COINS.map(c => (
+              <button key={c.id} onClick={() => { setCoin(c); set({ coin:c.id }); setPhase('addr'); }}
+                className="rounded-xl border border-gold/20 px-5 py-4 text-left transition-all hover:border-gold/60 hover:bg-gold/5">
+                <span className="font-serif tracking-[0.16em] text-gold">{c.label}</span>
+              </button>
+            ))}
+          </div>
+          <BackButton />
+        </GlassPanel>
+      )}
+      {phase === 'addr' && coin && <CryptoAddress coin={coin} />}
+    </Page>
+  );
+}
+
+function CryptoAddress({ coin }){
+  const { t } = useT();
+  const [copied, setCopied] = useState(false);
+  const [dot, setDot] = useState(true);
+  useEffect(() => { const i = setInterval(() => setDot(d => !d), 900); return () => clearInterval(i); }, []);
+  return (
+    <GlassPanel className="space-y-5 text-center">
+      <h1 className="gold-text text-lg">{coin.label}</h1>
+      <p className="break-all rounded-xl border border-gold/20 bg-graphite2/70 px-4 py-3 font-mono text-xs text-cream/90">{coin.address}</p>
+      <Button variant="ghost" onClick={async () => { if (await copyText(coin.address)) { setCopied(true); setTimeout(() => setCopied(false), 1500); } }}>
+        {copied ? t('common.copied') : t('common.copy')}
+      </Button>
+      <div className="flex items-center justify-center gap-2 text-xs text-cream/70">
+        <span className="h-2.5 w-2.5 rounded-full bg-crypto" style={{ animation:'blink 1s ease-in-out infinite', opacity: dot ? 1 : 0.15 }} />
+        {coin.chain === 'exchange' ? t('crypto.waitExchange') : t('crypto.waitChain')}
+      </div>
+      <Button className="w-full" onClick={() => nav('/checkout/processing')}>{t('crypto.completed')}</Button>
+      <BackButton />
+    </GlassPanel>
+  );
+}
+
+function Processing(){
+  const { t } = useT();
+  const [failed, setFailed] = useState(false);
+  useEffect(() => { const id = setTimeout(() => setFailed(true), 6000); return () => clearTimeout(id); }, []);
+  return (
+    <Page>
+      <div className="flex flex-col items-center gap-6 py-16 text-center">
+        <div className="h-14 w-14 rounded-full border-2 border-gold/30 border-t-gold" style={{ animation:'spin 1s linear infinite' }} />
+        <h1 className="gold-text text-xl">{t('crypto.processing')}</h1>
+        <p className="text-xs uppercase tracking-[0.24em] text-cream/50">{t('crypto.info')}</p>
+        <a href={TELEGRAM.direct} target="_blank" rel="noreferrer" className="text-gold underline">t.me/gustavoeuro</a>
+        <p key={failed ? 'f' : 'p'} className={clsx('max-w-md animate-fadeUp text-sm font-semibold tracking-wide', failed ? 'text-red-400' : 'text-cream/80')}>
+          {failed ? t('crypto.failed') : t('crypto.pending')}
+        </p>
+      </div>
+    </Page>
+  );
+}
+
+function BankTransfer(){
+  const { t, lang } = useT();
+  const [no, setNo] = useState(false);
+  const { order } = useOrder();
+  const { items } = useCart();
+  const open = async () => { await copyText(buildOrderMessage(items, order.shipping, lang)); window.open(TELEGRAM.direct, '_blank'); };
+  return (
+    <Page>
+      <GlassPanel className="space-y-4 text-center">
+        <h1 className="gold-text text-lg">{t('bankTransfer.q')}</h1>
+        <p className="text-xs text-cream/50">{t('bankTransfer.hint')}</p>
+        <Button className="w-full" onClick={open}>{t('bankTransfer.yes')}</Button>
+        <Button variant="ghost" className="w-full" onClick={() => setNo(true)}>{t('bankTransfer.no')}</Button>
+        {no && <BackButton />}
+      </GlassPanel>
+      <div className="mt-6 flex justify-center"><BackButton to="/checkout/payment" /></div>
+    </Page>
+  );
+}
+
+function Amazon(){
+  const { t } = useT();
+  const [phase, setPhase] = useState('ask');
+  const { order, set } = useOrder();
+  const send = () => {
+    const msg = encodeURIComponent(`BUONO AMAZON — GUSTAVOEURO\nCodice: ${order.voucher}`);
+    window.open(`${TELEGRAM.direct}?text=${msg}`, '_blank');
+  };
+  return (
+    <Page>
+      {phase === 'ask' ? (
+        <GlassPanel className="space-y-4 text-center">
+          <h1 className="gold-text text-lg">{t('amazon.q')}</h1>
+          <Button className="w-full" onClick={() => setPhase('code')}>{t('amazon.yes')}</Button>
+          <BackButton to="/checkout/payment" />
+        </GlassPanel>
+      ) : (
+        <GlassPanel className="space-y-4">
+          <h1 className="gold-text text-center text-lg">{t('amazon.insert')}</h1>
+          <input className="input text-center tracking-widest" placeholder={t('amazon.codePh')} value={order.voucher} onChange={e => set({ voucher:e.target.value.toUpperCase() })} />
+          <Button className="w-full" onClick={send} disabled={!order.voucher}>{t('amazon.send')}</Button>
+          <BackButton />
+        </GlassPanel>
+      )}
+    </Page>
+  );
+}
+
+/* ============================================================
+   15. APP
+============================================================ */
+function Router(){
+  const path = useRoute();
+  const seg = path.split('/').filter(Boolean);
+  const root = seg[0];
+
+  if (!root) return <BootLoading />;
+  if (root === 'gate') return <AccessGate />;
+  if (root === 'crypto-loading') return <CryptoLoading />;
+
+  let page = null;
+  if (root === 'home') page = <Home />;
+  else if (root === 'contact') page = <Contact />;
+  else if (root === 'banknotes') page = seg[1] ? <BanknoteTier denom={seg[1]} /> : <Banknotes />;
+  else if (root === 'paypal') page = seg[1] === 'verify' ? <PaypalVerify price={seg[2]} /> : <Paypal />;
+  else if (root === 'reviews') page = <Reviews />;
+  else if (root === 'faq') page = <Faq />;
+  else if (root === 'privacy' || root === 'terms' || root === 'cookies') page = <Legal doc={root} />;
+  else if (root === 'checkout') {
+    const s = seg[1];
+    if (s === 'shipping') page = <Shipping />;
+    else if (s === 'payment') page = <Payment />;
+    else if (s === 'crypto') page = <Crypto />;
+    else if (s === 'bank') page = <BankTransfer />;
+    else if (s === 'amazon') page = <Amazon />;
+    else if (s === 'processing') page = <Processing />;
+    else page = <Shipping />;
+  }
+  else page = <Home />;
+
+  return (
+    <>
+      <Header />
+      {page}
+      <Footer />
+      <CartDrawer />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <I18nProvider>
+      <CartProvider>
+        <OrderProvider>
+          <Router />
+        </OrderProvider>
+      </CartProvider>
+    </I18nProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>
